@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ATM Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card mx-auto" style="max-width: 500px;">
+            <div class="card-body">
+                <div class="d-grid mt-3">
+    <a href="{% url 'transaction' %}" class="btn btn-primary">Make a Transaction</a>
+</div>
+
+<h5 class="mt-4">Recent Transactions</h5>
+<ul class="list-group">
+    {% for txn in card.transaction_set.all|dictsortreversed:"timestamp"|slice:":5" %}
+        <li class="list-group-item d-flex justify-content-between">
+            {{ txn.timestamp|date:"M d, H:i" }} - {{ txn.txn_type }}
+            <span>₹{{ txn.amount }}</span>
+        </li>
+    {% empty %}
+        <li class="list-group-item">No recent transactions.</li>
+    {% endfor %}
+</ul>
+                <h4 class="card-title text-center">Welcome {{ card.cardholder_name }}</h4>
+                <p class="text-center">Card Number: {{ card.atmcard_num }}</p>
+                <p class="text-center">Current Balance: ₹{{ card.balance }}</p>
+                <div class="d-grid mt-4">
+                    <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
